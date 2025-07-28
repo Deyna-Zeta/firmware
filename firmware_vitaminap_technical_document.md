@@ -236,12 +236,17 @@ Implementa la comunicación con aplicaciones móviles usando un perfil GATT pers
 #define STRESS_CHAR_UUID          0x3001  // Custom
 #define HYDRATION_CHAR_UUID       0x3002  // Custom
 #define POSTURE_CHAR_UUID         0x3003  // Custom
+#define SEDENTARY_STATUS_CHAR_UUID 0x3004  // Custom
+#define SEDENTARY_STATS_CHAR_UUID  0x3005  // Custom
 
 esp_err_t ble_service_init(void);
 esp_err_t ble_start_advertising(void);
 esp_err_t ble_notify_heart_rate(uint8_t bpm);
 esp_err_t ble_notify_stress_level(uint8_t level);
 esp_err_t ble_set_partner_vibration(uint8_t pattern);
+esp_err_t ble_notify_sedentary_alert(uint32_t minutes_inactive);
+esp_err_t ble_notify_sedentary_stats(uint32_t daily_sedentary_time);
+esp_err_t ble_set_sedentary_threshold(uint32_t threshold_minutes);
 ```
 
 **Características GATT definidas:**
@@ -254,6 +259,8 @@ esp_err_t ble_set_partner_vibration(uint8_t pattern);
 - **Calidad del Aire**: Índice IAQ
 - **Estado Emocional**: Código de emoción detectada
 - **Control de Pareja**: Comandos para vibración sincronizada
+- **Estado de Sedentarismo**: Tiempo sin movimiento y alertas activas
+- **Estadísticas de Sedentarismo**: Tiempo sedentario diario acumulado
 
 ### Sincronización Wi-Fi
 
@@ -303,7 +310,8 @@ typedef enum {
     VIB_PATTERN_LONG,
     VIB_PATTERN_DOUBLE,
     VIB_PATTERN_BREATHING,
-    VIB_PATTERN_PARTNER_SYNC
+    VIB_PATTERN_PARTNER_SYNC,
+    VIB_PATTERN_SEDENTARY_ALERT
 } vibration_pattern_t;
 
 esp_err_t vibration_init(void);
@@ -318,6 +326,7 @@ esp_err_t vibration_stop(void);
 - **Hidratación baja**: Doble pulso largo
 - **Calidad del aire**: Serie de pulsos cortos
 - **Sincronización de pareja**: Patrón especial reconocible
+- **Alerta de sedentarismo**: 3 pulsos largos + pausa + 2 pulsos cortos
 
 ## Modos de Operación
 
@@ -604,6 +613,200 @@ typedef struct {
 - Identificación de patrones temporales
 - Exportación para análisis en app/nube
 
+### 9. Detección de Sedentarismo
+
+**Objetivo:**
+Detectar períodos prolongados de inactividad (>1 hora) y alertar al usuario mediante vibración para promover la actividad física y reducir los riesgos asociados al sedentarismo.
+
+**Algoritmo de detección:**
+```c
+typedef struct {
+    uint32_t last_movement_time;
+    float activity_threshold;
+    uint32_t sedentary_alert_interval;
+    bool sedentary_alert_active;
+    uint32_t daily_sedentary_time;
+} sedentary_monitor_t;
+
+bool detect_significant_movement(imu_data_t *imu) {
+    static float prev_accel_magnitude = 0;
+    
+    // Calcular magnitud de aceleración
+    float accel_magnitude = sqrt(imu->accel_x * imu->accel_x + 
+                                imu->accel_y * imu->accel_y + 
+                                imu->accel_z * imu->accel_z);
+    
+    // Calcular diferencia respecto a la muestra anterior
+    float magnitude_diff = fabs(accel_magnitude - prev_accel_magnitude);
+    prev_accel_magnitude = accel_magnitude;
+    
+    // Considerar movimiento significativo si supera el umbral
+    return (magnitude_diff > SEDENTARY_MOVEMENT_THRESHOLD);
+}
+
+esp_err_t check_sedentary_behavior(sedentary_monitor_t *monitor, imu_data_t *imu) {
+    uint32_t current_time = esp_timer_get_time() / 1000;
+    
+    if (detect_significant_movement(imu)) {
+        // Resetear timer de sedentarismo al detectar movimiento
+        monitor->last_movement_time = current_time;
+        monitor->sedentary_alert_active = false;
+    } else {
+        // Verificar tiempo transcurrido sin movimiento
+        uint32_t sedentary_duration = current_time - monitor->last_movement_time;
+        
+        if (sedentary_duration >= SEDENTARY_ALERT_THRESHOLD_MS && 
+            !monitor->sedentary_alert_active) {
+            
+            // Activar alerta de sedentarismo
+            vibration_set_pattern(VIB_PATTERN_SEDENTARY_ALERT);
+            storage_log_event("SEDENTARY_ALERT", NULL);
+            
+            if (ble_is_connected()) {
+                ble_notify_sedentary_alert(sedentary_duration / 60000); // minutos
+            }
+            
+            monitor->sedentary_alert_active = true;
+            
+            // Actualizar estadísticas diarias
+            monitor->daily_sedentary_time += sedentary_duration;
+            
+            return ESP_OK;
+        }
+    }
+    
+    return ESP_ERR_NOT_FOUND; // No hay alerta
+}
+```
+
+**Constantes de configuración:**
+```c
+#define SEDENTARY_MOVEMENT_THRESHOLD    0.1f    // g - umbral de movimiento significativo
+#define SEDENTARY_ALERT_THRESHOLD_MS    3600000 // 1 hora en milisegundos
+#define SEDENTARY_CHECK_INTERVAL_MS     10000   // verificar cada 10 segundos
+#define SEDENTARY_COOLDOWN_MS           300000  // 5 minutos entre alertas
+```
+
+**Patrón de vibración específico:**
+```c
+// En vibration.h se añade:
+VIB_PATTERN_SEDENTARY_ALERT,    // Patrón específico para sedentarismo
+
+// En vibration.c se implementa:
+case VIB_PATTERN_SEDENTARY_ALERT:
+    // Secuencia: 3 pulsos largos + pausa + 2 pulsos cortos
+    vibration_pulse(500, 100);  // Pulso largo
+    vibration_pulse(500, 100);  // Pulso largo  
+    vibration_pulse(500, 200);  // Pulso largo + pausa
+    vibration_pulse(200, 100);  // Pulso corto
+    vibration_pulse(200, 0);    // Pulso corto final
+    break;
+```
+
+**Integración con task_postura.c:**
+La detección de sedentarismo se integra en la tarea de postura existente para aprovechar los datos del IMU ya siendo procesados:
+
+```c
+void task_postura(void *pvParameters) {
+    imu_data_t imu_data;
+    float current_angle;
+    uint32_t bad_posture_start = 0;
+    
+    // Inicializar monitor de sedentarismo
+    sedentary_monitor_t sedentary_monitor = {
+        .last_movement_time = esp_timer_get_time() / 1000,
+        .activity_threshold = SEDENTARY_MOVEMENT_THRESHOLD,
+        .sedentary_alert_interval = SEDENTARY_ALERT_THRESHOLD_MS,
+        .sedentary_alert_active = false,
+        .daily_sedentary_time = 0
+    };
+    
+    while (1) {
+        // Leer datos del IMU
+        if (bmi270_read_data(&imu_data) == ESP_OK) {
+            
+            // === DETECCIÓN DE POSTURA EXISTENTE ===
+            current_angle = bmi270_calculate_tilt_angle(&imu_data);
+            
+            if (current_angle > POSTURE_THRESHOLD_DEGREES) {
+                if (bad_posture_start == 0) {
+                    bad_posture_start = esp_timer_get_time() / 1000;
+                } else {
+                    uint32_t duration = (esp_timer_get_time() / 1000) - bad_posture_start;
+                    if (duration > POSTURE_ALERT_TIME_MS) {
+                        vibration_set_pattern(VIB_PATTERN_POSTURE_ALERT);
+                        storage_log_event("POSTURE_ALERT", NULL);
+                        ble_notify_posture_alert(current_angle);
+                        
+                        bad_posture_start = 0;
+                        vTaskDelay(pdMS_TO_TICKS(POSTURE_COOLDOWN_MS));
+                    }
+                }
+            } else {
+                bad_posture_start = 0;
+            }
+            
+            // === NUEVA DETECCIÓN DE SEDENTARISMO ===
+            static uint32_t last_sedentary_check = 0;
+            uint32_t now = esp_timer_get_time() / 1000;
+            
+            if (now - last_sedentary_check >= SEDENTARY_CHECK_INTERVAL_MS) {
+                if (check_sedentary_behavior(&sedentary_monitor, &imu_data) == ESP_OK) {
+                    // Alerta de sedentarismo activada
+                    ESP_LOGI("SEDENTARY", "Alert triggered after 1 hour of inactivity");
+                    
+                    // Cooldown para evitar alertas repetitivas
+                    vTaskDelay(pdMS_TO_TICKS(SEDENTARY_COOLDOWN_MS));
+                }
+                last_sedentary_check = now;
+            }
+            
+            // Notificar estadísticas de sedentarismo vía BLE
+            if (ble_is_connected()) {
+                static uint32_t last_stats_update = 0;
+                if (now - last_stats_update >= 300000) { // cada 5 minutos
+                    ble_notify_sedentary_stats(sedentary_monitor.daily_sedentary_time);
+                    last_stats_update = now;
+                }
+            }
+        }
+        
+        vTaskDelay(pdMS_TO_TICKS(POSTURE_CHECK_INTERVAL_MS));
+    }
+}
+```
+
+**Características GATT adicionales:**
+```c
+// En ble_service.h se añaden:
+#define SEDENTARY_STATUS_CHAR_UUID    0x3004  // Estado de sedentarismo
+#define SEDENTARY_STATS_CHAR_UUID     0x3005  // Estadísticas diarias
+
+// Funciones en ble_service.c
+esp_err_t ble_notify_sedentary_alert(uint32_t minutes_inactive);
+esp_err_t ble_notify_sedentary_stats(uint32_t daily_sedentary_time);
+esp_err_t ble_set_sedentary_threshold(uint32_t threshold_minutes);
+```
+
+**Configuraciones personalizables:**
+- **Umbral de tiempo**: Configurable desde 30 minutos hasta 2 horas
+- **Sensibilidad de movimiento**: Ajustable según perfil de usuario
+- **Horario de funcionamiento**: Desactivar durante horas de sueño
+- **Días de la semana**: Permitir configuración de días laborales vs. fin de semana
+
+**Métricas y análisis:**
+- Tiempo total sedentario por día
+- Frecuencia de alertas activadas vs. ignoradas
+- Correlación con otros biomarcadores (estrés, fatiga)
+- Patrones de actividad a lo largo del día
+- Comparación con recomendaciones de salud (máximo 8 horas sedentarias)
+
+**Integración con gestión de energía:**
+La detección de sedentarismo se adapta al modo de energía:
+- **Modo normal**: Verificación cada 10 segundos
+- **Modo ahorro**: Verificación cada 30 segundos
+- **Modo crítico**: Función desactivada para conservar batería
+
 ## Gestión del Botón SW5 y Entrada de Usuario
 
 ### Funcionalidades del Botón
@@ -758,29 +961,62 @@ void task_postura(void *pvParameters) {
     float current_angle;
     uint32_t bad_posture_start = 0;
     
+    // Inicializar monitor de sedentarismo
+    sedentary_monitor_t sedentary_monitor = {
+        .last_movement_time = esp_timer_get_time() / 1000,
+        .activity_threshold = SEDENTARY_MOVEMENT_THRESHOLD,
+        .sedentary_alert_interval = SEDENTARY_ALERT_THRESHOLD_MS,
+        .sedentary_alert_active = false,
+        .daily_sedentary_time = 0
+    };
+    
     while (1) {
         // Leer datos del IMU
         if (bmi270_read_data(&imu_data) == ESP_OK) {
+            
+            // === DETECCIÓN DE POSTURA EXISTENTE ===
             current_angle = bmi270_calculate_tilt_angle(&imu_data);
             
-            // Evaluar postura
             if (current_angle > POSTURE_THRESHOLD_DEGREES) {
                 if (bad_posture_start == 0) {
                     bad_posture_start = esp_timer_get_time() / 1000;
                 } else {
                     uint32_t duration = (esp_timer_get_time() / 1000) - bad_posture_start;
                     if (duration > POSTURE_ALERT_TIME_MS) {
-                        // Activar alerta
                         vibration_set_pattern(VIB_PATTERN_POSTURE_ALERT);
                         storage_log_event("POSTURE_ALERT", NULL);
                         ble_notify_posture_alert(current_angle);
                         
-                        bad_posture_start = 0;  // Reset para evitar spam
+                        bad_posture_start = 0;
                         vTaskDelay(pdMS_TO_TICKS(POSTURE_COOLDOWN_MS));
                     }
                 }
             } else {
-                bad_posture_start = 0;  // Reset si mejora postura
+                bad_posture_start = 0;
+            }
+            
+            // === NUEVA DETECCIÓN DE SEDENTARISMO ===
+            static uint32_t last_sedentary_check = 0;
+            uint32_t now = esp_timer_get_time() / 1000;
+            
+            if (now - last_sedentary_check >= SEDENTARY_CHECK_INTERVAL_MS) {
+                if (check_sedentary_behavior(&sedentary_monitor, &imu_data) == ESP_OK) {
+                    // Alerta de sedentarismo activada
+                    ESP_LOGI("SEDENTARY", "Alert triggered after 1 hour of inactivity");
+                    
+                    // Cooldown para evitar alertas repetitivas
+                    vTaskDelay(pdMS_TO_TICKS(SEDENTARY_COOLDOWN_MS));
+                }
+                last_sedentary_check = now;
+            }
+            
+            // Notificar estadísticas de sedentarismo vía BLE
+            if (ble_is_connected()) {
+                static uint32_t last_stats_update = 0;
+                if (now - last_stats_update >= 300000) { // cada 5 minutos
+                    ble_notify_sedentary_stats(sedentary_monitor.daily_sedentary_time);
+                    last_stats_update = now;
+                }
             }
         }
         
@@ -939,6 +1175,7 @@ El firmware del collar inteligente Vitamina P representa una solución integral 
 - **Radar emocional de pareja** con comunicación BLE directa
 - **Detección de flow state** usando métricas fisiológicas combinadas
 - **Memoria emocional** para análisis de patrones a largo plazo
+- **Detección inteligente de sedentarismo** con alertas preventivas después de 1 hora de inactividad
 
 ### Ventajas Técnicas
 
