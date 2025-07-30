@@ -2153,6 +2153,12 @@ El firmware del collar inteligente Vitamina P representa una solución integral 
 - **Sistema háptico neurocientífico revolucionario** con 10+ patrones diferenciados e inteligencia adaptativa
 - **Calibración personal automática** con aprendizaje de preferencias del usuario en tiempo real
 - **Memoria emocional háptica** para reproducir patrones de momentos especiales
+- **Configuración granular completa** con control individual de 40+ funciones específicas
+- **Sistema de privacidad avanzado** con modo privado temporal y control de compartición
+- **Perfiles predefinidos inteligentes** para diferentes estilos de vida y necesidades
+- **Modos contextuales automáticos** que se adaptan a trabajo, sueño, ejercicio y vida social
+- **Alertas de cuidado proactivo** con análisis predictivo del bienestar de la pareja
+- **Compartición inteligente de datos** con configuración personalizable por tipo de información
 
 ### Ventajas Técnicas
 
@@ -2164,8 +2170,14 @@ El firmware del collar inteligente Vitamina P representa una solución integral 
 - **Inteligencia háptica contextual** que se adapta automáticamente al estado del usuario
 - **Comunicación no verbal avanzada** entre parejas mediante patrones de latido sincronizado
 - **Sistema de aprendizaje automático** que personaliza la experiencia sin intervención manual
+- **Arquitectura de configuración modular** que permite personalización extrema sin complejidad
+- **Protección de privacidad líder en la industria** con control granular de datos compartidos
+- **Detección contextual inteligente** que anticipa necesidades antes de que surjan
+- **Sistema de cuidado mutuo** que fortalece vínculos emocionales entre parejas
 
-El firmware resultante proporciona una base sólida para un dispositivo wearable de próxima generación, enfocado en el bienestar integral y la conexión emocional entre parejas, manteniendo los más altos estándares de calidad técnica y eficiencia energética.
+El firmware resultante establece un nuevo estándar en la industria de wearables, creando **el dispositivo más personalizable y respetuoso de la privacidad del mercado**. Con su sistema de configuración granular, inteligencia adaptativa y enfoque en el cuidado mutuo, el collar Vitamina P trasciende las limitaciones de los wearables tradicionales para ofrecer una experiencia verdaderamente personalizada que evoluciona con las necesidades únicas de cada usuario y pareja.
+
+**El resultado es revolucionario:** un wearable que no solo monitorea la salud, sino que **comprende, anticipa y cuida** activamente el bienestar físico y emocional de sus usuarios, estableciendo un nuevo paradigma en tecnología wearable centrada en el ser humano.
 
 **Sistema BLE para Configuración y Calibración Háptica:**
 
@@ -2599,4 +2611,2049 @@ esp_err_t ble_haptic_text_command_handler(const char* command_string) {
     
     ESP_LOGW("BLE_HAPTIC", "Unknown text command: %s", cmd.command);
     return ESP_ERR_NOT_SUPPORTED;
+}
+```
+
+## Sistema de Configuración Granular y Privacidad Avanzada
+
+### Configuración Individual de Funciones
+
+Sistema completo de personalización que permite al usuario controlar cada aspecto del collar con granularidad extrema.
+
+```c
+// granular_config_system.h
+
+#include "esp_err.h"
+#include "storage.h"
+#include "advanced_haptic_system.h"
+#include <stdbool.h>
+#include <stdint.h>
+
+// Configuración granular de funciones individuales
+typedef struct {
+    // Sensores básicos
+    bool heart_rate_monitoring;           // Monitoreo de ritmo cardíaco
+    bool spo2_monitoring;                 // Oximetría
+    bool temperature_monitoring;          // Temperatura corporal
+    bool hydration_monitoring;            // Nivel de hidratación
+    bool posture_monitoring;              // Detección de postura
+    bool movement_tracking;               // Seguimiento de movimiento
+    bool sedentary_detection;            // Detección de sedentarismo
+    bool sleep_tracking;                 // Seguimiento del sueño
+    
+    // Funciones ambientales
+    bool air_quality_monitoring;         // Calidad del aire
+    bool ambient_temperature_tracking;   // Temperatura ambiental
+    bool humidity_monitoring;            // Humedad relativa
+    bool voc_detection;                  // Compuestos orgánicos volátiles
+    
+    // Funciones de bienestar
+    bool stress_detection;               // Detección de estrés
+    bool hrv_analysis;                   // Análisis de variabilidad cardíaca
+    bool flow_state_detection;          // Detección de estado de flow
+    bool energy_level_tracking;         // Seguimiento de nivel de energía
+    bool mood_analysis;                  // Análisis de estado de ánimo
+    
+    // Alertas y notificaciones
+    bool posture_alerts;                 // Alertas de postura
+    bool hydration_reminders;            // Recordatorios de hidratación
+    bool movement_reminders;             // Recordatorios de movimiento
+    bool stress_relief_guidance;        // Guía para alivio del estrés
+    bool breathing_exercises;            // Ejercicios de respiración
+    bool environmental_alerts;           // Alertas ambientales
+    
+    // Funciones de pareja
+    bool partner_presence_detection;     // Detección de presencia de pareja
+    bool emotional_sharing;              // Compartir estado emocional
+    bool heartbeat_sharing;              // Compartir latidos
+    bool stress_alerts_to_partner;      // Alertas de estrés a pareja
+    bool location_sharing;               // Compartir ubicación aproximada
+    bool emergency_contact_notification; // Notificación de emergencia
+    
+    // Sistema háptico
+    bool haptic_feedback;                // Retroalimentación háptica general
+    bool adaptive_intensity;             // Intensidad adaptativa
+    bool contextual_patterns;            // Patrones contextuales
+    bool learning_mode;                  // Modo de aprendizaje
+    bool pattern_variations;             // Variaciones de patrones
+    
+    // Conectividad
+    bool bluetooth_connectivity;         // Conectividad Bluetooth
+    bool wifi_sync;                      // Sincronización WiFi
+    bool cloud_backup;                   // Respaldo en la nube
+    bool automatic_updates;              // Actualizaciones automáticas
+    
+    // Privacidad y seguridad
+    bool data_encryption;                // Cifrado de datos
+    bool anonymous_analytics;            // Analíticas anónimas
+    bool location_services;              // Servicios de ubicación
+    bool voice_commands;                 // Comandos de voz (futuro)
+} granular_config_t;
+
+// Perfiles predefinidos de usuario
+typedef enum {
+    USER_PROFILE_CUSTOM = 0,            // Personalizado por usuario
+    USER_PROFILE_MINIMALIST,            // Minimalista - solo esencial
+    USER_PROFILE_ATHLETIC,              // Atlético - enfoque fitness
+    USER_PROFILE_COUPLE,                // Pareja - máxima conectividad
+    USER_PROFILE_PROFESSIONAL,         // Profesional - trabajo enfocado
+    USER_PROFILE_WELLNESS,              // Bienestar - salud integral
+    USER_PROFILE_PRIVACY_FOCUSED,       // Privacidad - mínimo compartir
+    USER_PROFILE_SOCIAL,                // Social - máxima interacción
+    USER_PROFILE_SENIOR,                // Senior - simplicidad y seguridad
+    USER_PROFILE_MAX
+} user_profile_type_t;
+
+// Configuración de compartición de datos
+typedef struct {
+    // Datos básicos compartibles
+    bool share_heart_rate;              // Compartir ritmo cardíaco
+    bool share_stress_level;            // Compartir nivel de estrés
+    bool share_energy_level;            // Compartir nivel de energía
+    bool share_mood;                    // Compartir estado de ánimo
+    bool share_activity_status;         // Compartir estado de actividad
+    bool share_sleep_status;            // Compartir estado de sueño
+    bool share_location_zone;           // Compartir zona de ubicación
+    
+    // Eventos especiales compartibles
+    bool share_stress_alerts;           // Compartir alertas de estrés
+    bool share_emergency_events;        // Compartir eventos de emergencia
+    bool share_achievement_milestones;  // Compartir logros
+    bool share_flow_state_events;       // Compartir estados de flow
+    bool share_wellness_insights;       // Compartir insights de bienestar
+    
+    // Configuración de frecuencia
+    uint32_t sharing_frequency_ms;      // Frecuencia de compartición
+    bool real_time_sharing;             // Compartición en tiempo real
+    bool batch_sharing;                 // Compartición por lotes
+    
+    // Filtros de compartición
+    uint8_t stress_threshold_to_share;  // Umbral de estrés para compartir
+    uint8_t energy_threshold_to_share;  // Umbral de energía para compartir
+    bool share_only_significant_changes; // Solo cambios significativos
+    
+    // Configuración temporal
+    uint32_t sharing_start_time;        // Hora de inicio de compartición
+    uint32_t sharing_end_time;          // Hora de fin de compartición
+    bool weekends_different_sharing;    // Compartición diferente fines de semana
+} data_sharing_config_t;
+
+// Modos contextuales automáticos
+typedef struct {
+    // Configuración de modos
+    bool auto_work_mode;                // Modo trabajo automático
+    bool auto_sleep_mode;               // Modo sueño automático
+    bool auto_exercise_mode;            // Modo ejercicio automático
+    bool auto_social_mode;              // Modo social automático
+    bool auto_focus_mode;               // Modo concentración automático
+    bool auto_relaxation_mode;          // Modo relajación automático
+    
+    // Umbrales de detección
+    uint32_t work_hours_start;          // Inicio horas laborales
+    uint32_t work_hours_end;            // Fin horas laborales
+    float exercise_detection_threshold; // Umbral detección ejercicio
+    uint32_t sleep_detection_time;      // Tiempo para detectar sueño
+    float social_activity_threshold;    // Umbral actividad social
+    
+    // Configuraciones por modo
+    granular_config_t work_mode_config;       // Config modo trabajo
+    granular_config_t sleep_mode_config;      // Config modo sueño
+    granular_config_t exercise_mode_config;   // Config modo ejercicio
+    granular_config_t social_mode_config;     // Config modo social
+    granular_config_t focus_mode_config;      // Config modo concentración
+    granular_config_t relaxation_mode_config; // Config modo relajación
+} contextual_modes_config_t;
+
+// Configuración temporal
+typedef struct {
+    // Modo privado temporal
+    bool private_mode_active;           // Modo privado activo
+    uint32_t private_mode_start_time;   // Inicio modo privado
+    uint32_t private_mode_duration_ms;  // Duración modo privado
+    bool auto_exit_private_mode;        // Salir automáticamente
+    
+    // Desactivación temporal de funciones
+    uint64_t disabled_functions_mask;   // Máscara funciones desactivadas
+    uint32_t temp_disable_start_time;   // Inicio desactivación temporal
+    uint32_t temp_disable_duration_ms;  // Duración desactivación
+    
+    // Programación de funciones
+    bool scheduled_mode_changes;        // Cambios programados de modo
+    uint32_t scheduled_mode_times[8];   // Horarios programados
+    user_profile_type_t scheduled_profiles[8]; // Perfiles programados
+    
+    // Modo de emergencia
+    bool emergency_override_active;     // Override de emergencia activo
+    granular_config_t emergency_config; // Configuración de emergencia
+} temporal_config_t;
+
+// Alertas de cuidado proactivo
+typedef struct {
+    // Configuración de alertas para pareja
+    bool partner_stress_alert;          // Alerta estrés de pareja
+    bool partner_health_concern_alert;  // Alerta preocupación salud pareja
+    bool partner_low_energy_alert;      // Alerta baja energía pareja
+    bool partner_sleep_disturbance_alert; // Alerta alteración sueño pareja
+    bool partner_inactivity_alert;      // Alerta inactividad pareja
+    
+    // Umbrales de alerta
+    uint8_t stress_alert_threshold;     // Umbral alerta estrés
+    uint32_t inactivity_alert_time_ms;  // Tiempo para alerta inactividad
+    uint8_t energy_low_threshold;       // Umbral energía baja
+    
+    // Tipos de respuesta
+    bool gentle_reminder_response;      // Respuesta recordatorio suave
+    bool direct_notification_response;  // Respuesta notificación directa
+    bool haptic_empathy_response;       // Respuesta háptica empática
+    bool suggested_actions_response;    // Respuesta acciones sugeridas
+    
+    // Personalización de mensajes
+    char custom_stress_message[64];     // Mensaje personalizado estrés
+    char custom_support_message[64];    // Mensaje personalizado apoyo
+    char custom_care_message[64];       // Mensaje personalizado cuidado
+} proactive_care_config_t;
+
+// Estructura principal de configuración
+typedef struct {
+    granular_config_t granular_settings;
+    data_sharing_config_t sharing_settings;
+    contextual_modes_config_t contextual_settings;
+    temporal_config_t temporal_settings;
+    proactive_care_config_t proactive_care_settings;
+    
+    user_profile_type_t current_profile;
+    uint32_t config_version;
+    uint32_t last_modified_timestamp;
+    bool factory_reset_available;
+} master_config_t;
+
+// Funciones principales del sistema de configuración
+esp_err_t granular_config_init(void);
+esp_err_t granular_config_load_from_nvs(master_config_t *config);
+esp_err_t granular_config_save_to_nvs(const master_config_t *config);
+esp_err_t granular_config_set_profile(user_profile_type_t profile);
+esp_err_t granular_config_apply_profile(user_profile_type_t profile, master_config_t *config);
+
+// Funciones de configuración individual
+esp_err_t granular_config_enable_function(uint32_t function_id, bool enable);
+esp_err_t granular_config_set_sharing_preference(uint32_t data_type, bool share);
+esp_err_t granular_config_set_contextual_mode(user_context_t context, bool auto_enable);
+
+// Funciones de modo privado y temporal
+esp_err_t granular_config_enable_private_mode(uint32_t duration_minutes);
+esp_err_t granular_config_disable_private_mode(void);
+esp_err_t granular_config_disable_function_temporarily(uint32_t function_id, uint32_t duration_minutes);
+esp_err_t granular_config_schedule_profile_change(uint32_t time_hour_minute, user_profile_type_t profile);
+
+// Funciones de cuidado proactivo
+esp_err_t proactive_care_check_partner_status(void);
+esp_err_t proactive_care_send_support_alert(const char* message);
+esp_err_t proactive_care_configure_alert_threshold(uint32_t alert_type, uint8_t threshold);
+
+// Funciones utilitarias
+bool granular_config_is_function_enabled(uint32_t function_id);
+bool granular_config_is_sharing_enabled(uint32_t data_type);
+user_profile_type_t granular_config_get_current_profile(void);
+esp_err_t granular_config_factory_reset(void);
+esp_err_t granular_config_export_settings(char *json_buffer, size_t buffer_size);
+esp_err_t granular_config_import_settings(const char *json_string);
+```
+
+**Implementación de Perfiles Predefinidos:**
+
+```c
+// user_profiles.c
+
+// Definición de perfiles predefinidos
+static void init_minimalist_profile(master_config_t *config) {
+    // Perfil minimalista - solo funciones esenciales
+    memset(&config->granular_settings, 0, sizeof(granular_config_t));
+    
+    // Solo funciones básicas habilitadas
+    config->granular_settings.heart_rate_monitoring = true;
+    config->granular_settings.movement_tracking = true;
+    config->granular_settings.sedentary_detection = true;
+    config->granular_settings.posture_alerts = true;
+    config->granular_settings.haptic_feedback = true;
+    config->granular_settings.emergency_contact_notification = true;
+    
+    // Configuración de compartición mínima
+    config->sharing_settings.share_emergency_events = true;
+    config->sharing_settings.sharing_frequency_ms = 300000; // 5 minutos
+    config->sharing_settings.real_time_sharing = false;
+    
+    ESP_LOGI("PROFILE", "Minimalist profile configured");
+}
+
+static void init_athletic_profile(master_config_t *config) {
+    // Perfil atlético - enfoque en fitness y rendimiento
+    memset(&config->granular_settings, 0, sizeof(granular_config_t));
+    
+    // Todas las funciones de salud y rendimiento
+    config->granular_settings.heart_rate_monitoring = true;
+    config->granular_settings.spo2_monitoring = true;
+    config->granular_settings.temperature_monitoring = true;
+    config->granular_settings.hydration_monitoring = true;
+    config->granular_settings.movement_tracking = true;
+    config->granular_settings.hrv_analysis = true;
+    config->granular_settings.energy_level_tracking = true;
+    config->granular_settings.stress_detection = true;
+    config->granular_settings.breathing_exercises = true;
+    
+    // Alertas de rendimiento
+    config->granular_settings.hydration_reminders = true;
+    config->granular_settings.movement_reminders = true;
+    config->granular_settings.stress_relief_guidance = true;
+    
+    // Modo ejercicio automático habilitado
+    config->contextual_settings.auto_exercise_mode = true;
+    config->contextual_settings.exercise_detection_threshold = 1.5f;
+    
+    ESP_LOGI("PROFILE", "Athletic profile configured");
+}
+
+static void init_couple_profile(master_config_t *config) {
+    // Perfil pareja - máxima conectividad y compartición
+    memset(&config->granular_settings, 0xff, sizeof(granular_config_t));
+    
+    // Todas las funciones habilitadas
+    // Configuración de compartición completa
+    config->sharing_settings.share_heart_rate = true;
+    config->sharing_settings.share_stress_level = true;
+    config->sharing_settings.share_energy_level = true;
+    config->sharing_settings.share_mood = true;
+    config->sharing_settings.share_activity_status = true;
+    config->sharing_settings.share_sleep_status = true;
+    config->sharing_settings.share_stress_alerts = true;
+    config->sharing_settings.share_emergency_events = true;
+    config->sharing_settings.share_wellness_insights = true;
+    config->sharing_settings.real_time_sharing = true;
+    config->sharing_settings.sharing_frequency_ms = 30000; // 30 segundos
+    
+    // Cuidado proactivo completo
+    config->proactive_care_settings.partner_stress_alert = true;
+    config->proactive_care_settings.partner_health_concern_alert = true;
+    config->proactive_care_settings.partner_low_energy_alert = true;
+    config->proactive_care_settings.gentle_reminder_response = true;
+    config->proactive_care_settings.haptic_empathy_response = true;
+    
+    ESP_LOGI("PROFILE", "Couple profile configured");
+}
+
+static void init_professional_profile(master_config_t *config) {
+    // Perfil profesional - enfoque en productividad
+    memset(&config->granular_settings, 0, sizeof(granular_config_t));
+    
+    // Funciones de bienestar y productividad
+    config->granular_settings.heart_rate_monitoring = true;
+    config->granular_settings.stress_detection = true;
+    config->granular_settings.flow_state_detection = true;
+    config->granular_settings.posture_monitoring = true;
+    config->granular_settings.air_quality_monitoring = true;
+    config->granular_settings.posture_alerts = true;
+    config->granular_settings.stress_relief_guidance = true;
+    config->granular_settings.breathing_exercises = true;
+    
+    // Modo trabajo automático
+    config->contextual_settings.auto_work_mode = true;
+    config->contextual_settings.auto_focus_mode = true;
+    config->contextual_settings.work_hours_start = 9 * 60; // 9:00 AM
+    config->contextual_settings.work_hours_end = 17 * 60;  // 5:00 PM
+    
+    // Compartición limitada durante trabajo
+    config->sharing_settings.share_stress_alerts = true;
+    config->sharing_settings.share_emergency_events = true;
+    config->sharing_settings.sharing_frequency_ms = 600000; // 10 minutos
+    
+    ESP_LOGI("PROFILE", "Professional profile configured");
+}
+
+static void init_privacy_focused_profile(master_config_t *config) {
+    // Perfil enfocado en privacidad - mínimo compartir
+    memset(&config->granular_settings, 0, sizeof(granular_config_t));
+    
+    // Solo funciones locales esenciales
+    config->granular_settings.heart_rate_monitoring = true;
+    config->granular_settings.posture_monitoring = true;
+    config->granular_settings.movement_tracking = true;
+    config->granular_settings.stress_detection = true;
+    config->granular_settings.haptic_feedback = true;
+    
+    // Sin compartición excepto emergencias
+    memset(&config->sharing_settings, 0, sizeof(data_sharing_config_t));
+    config->sharing_settings.share_emergency_events = true;
+    config->sharing_settings.sharing_frequency_ms = 86400000; // 24 horas
+    
+    // Sin analíticas ni respaldo en nube
+    config->granular_settings.anonymous_analytics = false;
+    config->granular_settings.cloud_backup = false;
+    config->granular_settings.location_services = false;
+    
+    ESP_LOGI("PROFILE", "Privacy-focused profile configured");
+}
+
+esp_err_t granular_config_apply_profile(user_profile_type_t profile, master_config_t *config) {
+    if (!config) return ESP_ERR_INVALID_ARG;
+    
+    switch (profile) {
+        case USER_PROFILE_MINIMALIST:
+            init_minimalist_profile(config);
+            break;
+        case USER_PROFILE_ATHLETIC:
+            init_athletic_profile(config);
+            break;
+        case USER_PROFILE_COUPLE:
+            init_couple_profile(config);
+            break;
+        case USER_PROFILE_PROFESSIONAL:
+            init_professional_profile(config);
+            break;
+        case USER_PROFILE_PRIVACY_FOCUSED:
+            init_privacy_focused_profile(config);
+            break;
+        case USER_PROFILE_CUSTOM:
+            // No cambiar configuración para perfil personalizado
+            break;
+        default:
+            ESP_LOGW("PROFILE", "Unknown profile type: %d", profile);
+            return ESP_ERR_INVALID_ARG;
+    }
+    
+    config->current_profile = profile;
+    config->last_modified_timestamp = esp_timer_get_time() / 1000000;
+    
+    return granular_config_save_to_nvs(config);
+}
+```
+
+**Sistema de Compartición Inteligente de Datos:**
+
+```c
+// intelligent_data_sharing.c
+
+#include "granular_config_system.h"
+#include "ble_service.h"
+#include "esp_log.h"
+#include "esp_timer.h"
+#include <string.h>
+
+// Estado de emparejamiento de collares
+typedef struct {
+    char partner_device_id[32];         // ID único del collar de la pareja
+    bool is_paired;                     // Estado de emparejamiento
+    uint32_t last_seen_timestamp;       // Última vez que se vio la pareja
+    uint8_t connection_strength;        // Fuerza de conexión (RSSI)
+    bool real_time_connection_active;   // Conexión en tiempo real activa
+    uint32_t total_shared_data_bytes;   // Total de datos compartidos
+    uint32_t last_sync_timestamp;       // Última sincronización completa
+} partner_pairing_state_t;
+
+// Paquete de datos compartidos
+typedef struct {
+    uint32_t timestamp;                 // Timestamp del dato
+    uint8_t data_type;                  // Tipo de dato
+    uint8_t priority;                   // Prioridad (0=baja, 255=emergencia)
+    uint16_t data_size;                 // Tamaño de los datos
+    uint8_t data_payload[64];           // Payload de datos
+    uint32_t checksum;                  // Checksum para integridad
+    bool requires_acknowledgment;       // Requiere confirmación
+} shared_data_packet_t;
+
+// Cola de datos para compartir
+typedef struct {
+    shared_data_packet_t packets[32];   // Buffer circular de paquetes
+    uint8_t write_index;                // Índice de escritura
+    uint8_t read_index;                 // Índice de lectura
+    uint8_t packet_count;               // Número de paquetes en cola
+    SemaphoreHandle_t queue_mutex;      // Mutex para acceso concurrente
+} data_sharing_queue_t;
+
+// Tipos de datos compartibles
+typedef enum {
+    SHARED_DATA_HEART_RATE = 0x01,
+    SHARED_DATA_STRESS_LEVEL = 0x02,
+    SHARED_DATA_ENERGY_LEVEL = 0x03,
+    SHARED_DATA_MOOD_STATE = 0x04,
+    SHARED_DATA_ACTIVITY_STATUS = 0x05,
+    SHARED_DATA_SLEEP_STATUS = 0x06,
+    SHARED_DATA_LOCATION_ZONE = 0x07,
+    SHARED_DATA_EMERGENCY_ALERT = 0x08,
+    SHARED_DATA_STRESS_ALERT = 0x09,
+    SHARED_DATA_WELLNESS_INSIGHT = 0x0A,
+    SHARED_DATA_ACHIEVEMENT = 0x0B,
+    SHARED_DATA_FLOW_STATE = 0x0C,
+    SHARED_DATA_CUSTOM_MESSAGE = 0x0D,
+    SHARED_DATA_HAPTIC_SYNC = 0x0E,
+    SHARED_DATA_CARE_REQUEST = 0x0F
+} shared_data_type_t;
+
+// Estado global del sistema de compartición
+static partner_pairing_state_t g_partner_state = {0};
+static data_sharing_queue_t g_sharing_queue = {0};
+static master_config_t *g_current_config = NULL;
+static TaskHandle_t g_data_sharing_task = NULL;
+
+// Inicialización del sistema de compartición
+esp_err_t intelligent_data_sharing_init(master_config_t *config) {
+    if (!config) return ESP_ERR_INVALID_ARG;
+    
+    g_current_config = config;
+    
+    // Inicializar mutex de la cola
+    g_sharing_queue.queue_mutex = xSemaphoreCreateMutex();
+    if (g_sharing_queue.queue_mutex == NULL) {
+        ESP_LOGE("DATA_SHARE", "Failed to create queue mutex");
+        return ESP_ERR_NO_MEM;
+    }
+    
+    // Inicializar estado de pareja desde NVS
+    load_partner_pairing_state();
+    
+    // Crear tarea de procesamiento de compartición
+    BaseType_t task_created = xTaskCreatePinnedToCore(
+        data_sharing_task,
+        "data_sharing",
+        4096,
+        NULL,
+        configMAX_PRIORITIES - 3,
+        &g_data_sharing_task,
+        1  // Core 1
+    );
+    
+    if (task_created != pdPASS) {
+        ESP_LOGE("DATA_SHARE", "Failed to create data sharing task");
+        return ESP_ERR_NO_MEM;
+    }
+    
+    ESP_LOGI("DATA_SHARE", "Intelligent data sharing system initialized");
+    return ESP_OK;
+}
+
+// Tarea principal de compartición de datos
+static void data_sharing_task(void *pvParameters) {
+    TickType_t last_routine_share = 0;
+    TickType_t last_partner_scan = 0;
+    
+    ESP_LOGI("DATA_SHARE", "Data sharing task started");
+    
+    while (1) {
+        TickType_t current_time = xTaskGetTickCount();
+        
+        // Escanear por pareja cada 10 segundos
+        if (current_time - last_partner_scan > pdMS_TO_TICKS(10000)) {
+            scan_for_partner();
+            last_partner_scan = current_time;
+        }
+        
+        // Procesar cola de datos para compartir
+        process_data_sharing_queue();
+        
+        // Compartición rutinaria según configuración
+        if (g_current_config->sharing_settings.real_time_sharing ||
+            (current_time - last_routine_share > pdMS_TO_TICKS(g_current_config->sharing_settings.sharing_frequency_ms))) {
+            
+            perform_routine_data_sharing();
+            last_routine_share = current_time;
+        }
+        
+        // Verificar si la pareja necesita cuidado proactivo
+        check_partner_care_needs();
+        
+        // Procesar mensajes recibidos de la pareja
+        process_received_partner_data();
+        
+        vTaskDelay(pdMS_TO_TICKS(1000)); // Verificar cada segundo
+    }
+}
+
+// Escanear por collar de la pareja
+static esp_err_t scan_for_partner(void) {
+    if (!g_current_config->granular_settings.partner_presence_detection) {
+        return ESP_OK; // Función deshabilitada
+    }
+    
+    // Escanear dispositivos BLE cercanos
+    esp_ble_gap_start_scanning(5); // 5 segundos de escaneo
+    
+    // Aquí se implementaría la lógica de reconocimiento del collar de la pareja
+    // basada en el device_id almacenado
+    
+    return ESP_OK;
+}
+
+// Añadir datos a la cola de compartición
+esp_err_t intelligent_share_data(shared_data_type_t data_type, const void *data, size_t data_size, uint8_t priority) {
+    if (!data || data_size == 0 || data_size > 64) {
+        return ESP_ERR_INVALID_ARG;
+    }
+    
+    // Verificar si este tipo de dato está habilitado para compartir
+    if (!is_data_type_shareable(data_type)) {
+        ESP_LOGD("DATA_SHARE", "Data type %d not enabled for sharing", data_type);
+        return ESP_OK; // No es error, simplemente no se comparte
+    }
+    
+    // Verificar si estamos en modo privado
+    if (g_current_config->temporal_settings.private_mode_active) {
+        if (data_type != SHARED_DATA_EMERGENCY_ALERT) {
+            ESP_LOGD("DATA_SHARE", "Private mode active, not sharing data type %d", data_type);
+            return ESP_OK;
+        }
+    }
+    
+    if (xSemaphoreTake(g_sharing_queue.queue_mutex, pdMS_TO_TICKS(100)) != pdTRUE) {
+        ESP_LOGW("DATA_SHARE", "Failed to acquire queue mutex");
+        return ESP_ERR_TIMEOUT;
+    }
+    
+    // Verificar si hay espacio en la cola
+    if (g_sharing_queue.packet_count >= 32) {
+        ESP_LOGW("DATA_SHARE", "Sharing queue full, dropping oldest packet");
+        // Avanzar read_index para hacer espacio
+        g_sharing_queue.read_index = (g_sharing_queue.read_index + 1) % 32;
+        g_sharing_queue.packet_count--;
+    }
+    
+    // Crear paquete de datos
+    shared_data_packet_t *packet = &g_sharing_queue.packets[g_sharing_queue.write_index];
+    packet->timestamp = esp_timer_get_time() / 1000;
+    packet->data_type = data_type;
+    packet->priority = priority;
+    packet->data_size = data_size;
+    memcpy(packet->data_payload, data, data_size);
+    packet->checksum = calculate_checksum(packet);
+    packet->requires_acknowledgment = (priority > 200); // Alta prioridad requiere ACK
+    
+    // Avanzar índices
+    g_sharing_queue.write_index = (g_sharing_queue.write_index + 1) % 32;
+    g_sharing_queue.packet_count++;
+    
+    xSemaphoreGive(g_sharing_queue.queue_mutex);
+    
+    ESP_LOGD("DATA_SHARE", "Queued data type %d for sharing (priority %d)", data_type, priority);
+    
+    return ESP_OK;
+}
+
+// Verificar si un tipo de dato es compartible según configuración
+static bool is_data_type_shareable(shared_data_type_t data_type) {
+    data_sharing_config_t *config = &g_current_config->sharing_settings;
+    
+    switch (data_type) {
+        case SHARED_DATA_HEART_RATE:
+            return config->share_heart_rate;
+        case SHARED_DATA_STRESS_LEVEL:
+            return config->share_stress_level;
+        case SHARED_DATA_ENERGY_LEVEL:
+            return config->share_energy_level;
+        case SHARED_DATA_MOOD_STATE:
+            return config->share_mood;
+        case SHARED_DATA_ACTIVITY_STATUS:
+            return config->share_activity_status;
+        case SHARED_DATA_SLEEP_STATUS:
+            return config->share_sleep_status;
+        case SHARED_DATA_LOCATION_ZONE:
+            return config->share_location_zone;
+        case SHARED_DATA_EMERGENCY_ALERT:
+            return config->share_emergency_events;
+        case SHARED_DATA_STRESS_ALERT:
+            return config->share_stress_alerts;
+        case SHARED_DATA_WELLNESS_INSIGHT:
+            return config->share_wellness_insights;
+        case SHARED_DATA_ACHIEVEMENT:
+            return config->share_achievement_milestones;
+        case SHARED_DATA_FLOW_STATE:
+            return config->share_flow_state_events;
+        default:
+            return false;
+    }
+}
+
+// Procesar cola de compartición
+static void process_data_sharing_queue(void) {
+    if (g_sharing_queue.packet_count == 0 || !g_partner_state.is_paired) {
+        return;
+    }
+    
+    if (xSemaphoreTake(g_sharing_queue.queue_mutex, pdMS_TO_TICKS(10)) != pdTRUE) {
+        return;
+    }
+    
+    // Procesar hasta 5 paquetes por iteración para no bloquear
+    int packets_processed = 0;
+    while (g_sharing_queue.packet_count > 0 && packets_processed < 5) {
+        shared_data_packet_t *packet = &g_sharing_queue.packets[g_sharing_queue.read_index];
+        
+        // Enviar paquete vía BLE
+        esp_err_t result = send_data_packet_to_partner(packet);
+        
+        if (result == ESP_OK) {
+            // Paquete enviado exitosamente
+            g_sharing_queue.read_index = (g_sharing_queue.read_index + 1) % 32;
+            g_sharing_queue.packet_count--;
+            packets_processed++;
+            
+            ESP_LOGD("DATA_SHARE", "Successfully sent data type %d to partner", packet->data_type);
+        } else {
+            ESP_LOGW("DATA_SHARE", "Failed to send data packet: %d", result);
+            break; // Salir del bucle si falla el envío
+        }
+    }
+    
+    xSemaphoreGive(g_sharing_queue.queue_mutex);
+}
+
+// Enviar paquete de datos a la pareja vía BLE
+static esp_err_t send_data_packet_to_partner(const shared_data_packet_t *packet) {
+    if (!packet || !g_partner_state.real_time_connection_active) {
+        return ESP_ERR_INVALID_STATE;
+    }
+    
+    // Serializar paquete para transmisión BLE
+    uint8_t ble_packet[80]; // Header + datos
+    size_t packet_size = serialize_data_packet(packet, ble_packet, sizeof(ble_packet));
+    
+    // Enviar vía característica BLE de compartición de datos
+    esp_err_t result = esp_ble_gatts_send_indicate(
+        g_gatts_if,
+        g_partner_connection_id,
+        g_data_sharing_char_handle,
+        packet_size,
+        ble_packet,
+        packet->requires_acknowledgment
+    );
+    
+    if (result == ESP_OK) {
+        g_partner_state.total_shared_data_bytes += packet_size;
+    }
+    
+    return result;
+}
+
+// Compartición rutinaria de datos vitales
+static void perform_routine_data_sharing(void) {
+    uint32_t current_time = esp_timer_get_time() / 1000;
+    
+    // Verificar ventana de tiempo para compartición
+    if (!is_sharing_time_window_active(current_time)) {
+        return;
+    }
+    
+    // Compartir datos vitales básicos si están habilitados
+    if (g_current_config->sharing_settings.share_heart_rate) {
+        uint8_t hr = get_current_heart_rate();
+        intelligent_share_data(SHARED_DATA_HEART_RATE, &hr, sizeof(hr), 50);
+    }
+    
+    if (g_current_config->sharing_settings.share_stress_level) {
+        uint8_t stress = get_current_stress_level();
+        // Solo compartir si supera el umbral configurado
+        if (stress >= g_current_config->sharing_settings.stress_threshold_to_share) {
+            intelligent_share_data(SHARED_DATA_STRESS_LEVEL, &stress, sizeof(stress), 100);
+        }
+    }
+    
+    if (g_current_config->sharing_settings.share_energy_level) {
+        uint8_t energy = get_current_energy_level();
+        if (energy <= g_current_config->sharing_settings.energy_threshold_to_share) {
+            intelligent_share_data(SHARED_DATA_ENERGY_LEVEL, &energy, sizeof(energy), 75);
+        }
+    }
+    
+    if (g_current_config->sharing_settings.share_activity_status) {
+        uint8_t activity = get_current_activity_status();
+        intelligent_share_data(SHARED_DATA_ACTIVITY_STATUS, &activity, sizeof(activity), 25);
+    }
+}
+
+// Verificar si estamos en ventana de tiempo para compartir
+static bool is_sharing_time_window_active(uint32_t current_time_seconds) {
+    // Convertir a minutos desde medianoche
+    uint32_t minutes_since_midnight = (current_time_seconds % 86400) / 60;
+    
+    uint32_t start_minutes = g_current_config->sharing_settings.sharing_start_time;
+    uint32_t end_minutes = g_current_config->sharing_settings.sharing_end_time;
+    
+    // Si start == end, compartición habilitada todo el día
+    if (start_minutes == end_minutes) {
+        return true;
+    }
+    
+    // Verificar si estamos en el rango de tiempo
+    if (start_minutes < end_minutes) {
+        // Rango normal (ej: 8:00 - 22:00)
+        return (minutes_since_midnight >= start_minutes && minutes_since_midnight <= end_minutes);
+    } else {
+        // Rango que cruza medianoche (ej: 22:00 - 8:00)
+        return (minutes_since_midnight >= start_minutes || minutes_since_midnight <= end_minutes);
+    }
+}
+
+// Funciones de API pública para compartición específica
+esp_err_t share_emergency_alert(const char* emergency_type, const char* location) {
+    char emergency_data[64];
+    snprintf(emergency_data, sizeof(emergency_data), "%s|%s", emergency_type, location);
+    
+    return intelligent_share_data(SHARED_DATA_EMERGENCY_ALERT, emergency_data, 
+                                strlen(emergency_data), 255); // Máxima prioridad
+}
+
+esp_err_t share_stress_alert_to_partner(uint8_t stress_level, const char* context) {
+    if (!g_current_config->sharing_settings.share_stress_alerts) {
+        return ESP_OK;
+    }
+    
+    struct {
+        uint8_t stress_level;
+        char context[32];
+    } stress_data = {
+        .stress_level = stress_level
+    };
+    strncpy(stress_data.context, context ? context : "", sizeof(stress_data.context) - 1);
+    
+    return intelligent_share_data(SHARED_DATA_STRESS_ALERT, &stress_data, 
+                                sizeof(stress_data), 200);
+}
+
+esp_err_t share_wellness_insight(const char* insight_type, float value, const char* recommendation) {
+    if (!g_current_config->sharing_settings.share_wellness_insights) {
+        return ESP_OK;
+    }
+    
+    struct {
+        char type[16];
+        float value;
+        char recommendation[32];
+    } insight_data;
+    
+    strncpy(insight_data.type, insight_type, sizeof(insight_data.type) - 1);
+    insight_data.value = value;
+    strncpy(insight_data.recommendation, recommendation ? recommendation : "", 
+            sizeof(insight_data.recommendation) - 1);
+    
+    return intelligent_share_data(SHARED_DATA_WELLNESS_INSIGHT, &insight_data, 
+                                sizeof(insight_data), 150);
+}
+
+esp_err_t share_custom_care_message(const char* message) {
+    if (!message || strlen(message) == 0) {
+        return ESP_ERR_INVALID_ARG;
+    }
+    
+    return intelligent_share_data(SHARED_DATA_CUSTOM_MESSAGE, message, 
+                                strlen(message), 180);
+}
+
+// Emparejamiento de collares
+esp_err_t pair_with_partner_collar(const char* partner_device_id, const char* pairing_code) {
+    if (!partner_device_id || !pairing_code) {
+        return ESP_ERR_INVALID_ARG;
+    }
+    
+    // Verificar código de emparejamiento (implementación segura)
+    if (!verify_pairing_code(partner_device_id, pairing_code)) {
+        ESP_LOGW("DATA_SHARE", "Invalid pairing code for device %s", partner_device_id);
+        return ESP_ERR_INVALID_RESPONSE;
+    }
+    
+    // Establecer emparejamiento
+    strncpy(g_partner_state.partner_device_id, partner_device_id, 
+            sizeof(g_partner_state.partner_device_id) - 1);
+    g_partner_state.is_paired = true;
+    g_partner_state.last_seen_timestamp = esp_timer_get_time() / 1000;
+    
+    // Guardar estado de emparejamiento en NVS
+    save_partner_pairing_state();
+    
+    ESP_LOGI("DATA_SHARE", "Successfully paired with partner: %s", partner_device_id);
+    
+    return ESP_OK;
+}
+
+esp_err_t unpair_from_partner(void) {
+    memset(&g_partner_state, 0, sizeof(partner_pairing_state_t));
+    save_partner_pairing_state();
+    
+    ESP_LOGI("DATA_SHARE", "Unpaired from partner collar");
+    
+    return ESP_OK;
+}
+```
+
+**Sistema de Alertas de Cuidado Proactivo:**
+
+```c
+// proactive_care_system.c
+
+#include "granular_config_system.h"
+#include "intelligent_data_sharing.h"
+#include "advanced_haptic_system.h"
+#include "esp_log.h"
+#include <math.h>
+
+// Estado de bienestar de la pareja
+typedef struct {
+    // Métricas de salud actuales
+    uint8_t stress_level;               // Nivel de estrés 0-100
+    uint8_t energy_level;               // Nivel de energía 0-100
+    uint8_t mood_score;                 // Puntuación de ánimo 0-100
+    uint32_t last_activity_time;        // Última actividad detectada
+    uint32_t sleep_quality_score;       // Calidad de sueño 0-100
+    bool is_in_distress;                // Estado de angustia detectado
+    
+    // Tendencias y patrones
+    float stress_trend;                 // Tendencia de estrés (+/- por hora)
+    float energy_trend;                 // Tendencia de energía (+/- por hora)
+    uint32_t consecutive_high_stress_time; // Tiempo consecutivo con estrés alto
+    uint32_t inactivity_duration;       // Duración de inactividad actual
+    
+    // Historial para análisis predictivo
+    uint8_t stress_history[24];         // Historial de estrés (24 horas)
+    uint8_t energy_history[24];         // Historial de energía (24 horas)
+    uint8_t current_hour_index;         // Índice hora actual en historial
+    
+    // Estado de alertas enviadas
+    bool stress_alert_sent;             // Alerta de estrés ya enviada
+    bool energy_alert_sent;             // Alerta de energía ya enviada
+    bool inactivity_alert_sent;         // Alerta de inactividad ya enviada
+    uint32_t last_care_message_time;    // Última vez que se envió mensaje de cuidado
+} partner_wellness_state_t;
+
+// Tipos de alertas de cuidado
+typedef enum {
+    CARE_ALERT_STRESS_SUPPORT = 0x01,      // Apoyo por estrés
+    CARE_ALERT_ENERGY_BOOST = 0x02,        // Impulso de energía
+    CARE_ALERT_ACTIVITY_ENCOURAGE = 0x03,  // Estímulo de actividad
+    CARE_ALERT_MOOD_LIFT = 0x04,           // Mejorar ánimo
+    CARE_ALERT_SLEEP_CONCERN = 0x05,       // Preocupación por sueño
+    CARE_ALERT_HEALTH_CHECK = 0x06,        // Verificación de salud
+    CARE_ALERT_GENTLE_REMINDER = 0x07,     // Recordatorio suave
+    CARE_ALERT_EMERGENCY_CHECK = 0x08      // Verificación de emergencia
+} care_alert_type_t;
+
+// Acciones de cuidado sugeridas
+typedef struct {
+    care_alert_type_t alert_type;
+    char suggested_action[64];
+    char care_message[128];
+    uint8_t urgency_level;              // 0-255
+    uint32_t estimated_help_duration;   // Tiempo estimado de ayuda (minutos)
+} care_action_suggestion_t;
+
+// Estado global del sistema de cuidado proactivo
+static partner_wellness_state_t g_partner_wellness = {0};
+static master_config_t *g_care_config = NULL;
+static TaskHandle_t g_proactive_care_task = NULL;
+
+// Inicialización del sistema de cuidado proactivo
+esp_err_t proactive_care_system_init(master_config_t *config) {
+    if (!config) return ESP_ERR_INVALID_ARG;
+    
+    g_care_config = config;
+    
+    // Inicializar historial de wellness
+    memset(&g_partner_wellness, 0, sizeof(partner_wellness_state_t));
+    
+    // Crear tarea de monitoreo proactivo
+    BaseType_t task_created = xTaskCreatePinnedToCore(
+        proactive_care_monitoring_task,
+        "proactive_care",
+        4096,
+        NULL,
+        configMAX_PRIORITIES - 4,
+        &g_proactive_care_task,
+        1  // Core 1
+    );
+    
+    if (task_created != pdPASS) {
+        ESP_LOGE("PROACTIVE_CARE", "Failed to create proactive care task");
+        return ESP_ERR_NO_MEM;
+    }
+    
+    ESP_LOGI("PROACTIVE_CARE", "Proactive care system initialized");
+    return ESP_OK;
+}
+
+// Tarea principal de monitoreo proactivo
+static void proactive_care_monitoring_task(void *pvParameters) {
+    TickType_t last_wellness_analysis = 0;
+    TickType_t last_trend_calculation = 0;
+    TickType_t last_partner_check = 0;
+    
+    ESP_LOGI("PROACTIVE_CARE", "Proactive care monitoring task started");
+    
+    while (1) {
+        TickType_t current_time = xTaskGetTickCount();
+        
+        // Verificar estado de la pareja cada 30 segundos
+        if (current_time - last_partner_check > pdMS_TO_TICKS(30000)) {
+            proactive_care_check_partner_status();
+            last_partner_check = current_time;
+        }
+        
+        // Análisis de bienestar cada 2 minutos
+        if (current_time - last_wellness_analysis > pdMS_TO_TICKS(120000)) {
+            analyze_partner_wellness_state();
+            last_wellness_analysis = current_time;
+        }
+        
+        // Cálculo de tendencias cada 10 minutos
+        if (current_time - last_trend_calculation > pdMS_TO_TICKS(600000)) {
+            calculate_wellness_trends();
+            last_trend_calculation = current_time;
+        }
+        
+        // Verificar si necesita enviar alertas de cuidado
+        check_and_send_care_alerts();
+        
+        vTaskDelay(pdMS_TO_TICKS(10000)); // Verificar cada 10 segundos
+    }
+}
+
+// Verificar estado actual del partner
+esp_err_t proactive_care_check_partner_status(void) {
+    if (!g_care_config->granular_settings.partner_presence_detection ||
+        !g_partner_state.is_paired) {
+        return ESP_OK; // Sistema deshabilitado o no hay pareja
+    }
+    
+    // Obtener datos más recientes del partner
+    partner_wellness_state_t *wellness = &g_partner_wellness;
+    uint32_t current_time = esp_timer_get_time() / 1000;
+    
+    // Actualizar métricas desde datos compartidos recibidos
+    wellness->stress_level = get_partner_stress_level();
+    wellness->energy_level = get_partner_energy_level();
+    wellness->mood_score = get_partner_mood_score();
+    
+    // Detectar inactividad prolongada
+    uint32_t last_activity = get_partner_last_activity_time();
+    if (last_activity > 0) {
+        wellness->inactivity_duration = current_time - last_activity;
+    }
+    
+    // Actualizar historial cada hora
+    struct tm timeinfo;
+    localtime_r((time_t*)&current_time, &timeinfo);
+    uint8_t current_hour = timeinfo.tm_hour;
+    
+    if (current_hour != wellness->current_hour_index) {
+        wellness->stress_history[current_hour] = wellness->stress_level;
+        wellness->energy_history[current_hour] = wellness->energy_level;
+        wellness->current_hour_index = current_hour;
+    }
+    
+    ESP_LOGD("PROACTIVE_CARE", "Partner status: stress=%d, energy=%d, mood=%d, inactive=%lus", 
+            wellness->stress_level, wellness->energy_level, wellness->mood_score, 
+            wellness->inactivity_duration);
+    
+    return ESP_OK;
+}
+
+// Analizar estado de bienestar de la pareja
+static void analyze_partner_wellness_state(void) {
+    partner_wellness_state_t *wellness = &g_partner_wellness;
+    proactive_care_config_t *care_config = &g_care_config->proactive_care_settings;
+    
+    // Detectar estrés sostenido alto
+    if (wellness->stress_level >= care_config->stress_alert_threshold) {
+        if (wellness->consecutive_high_stress_time == 0) {
+            wellness->consecutive_high_stress_time = esp_timer_get_time() / 1000;
+        }
+    } else {
+        wellness->consecutive_high_stress_time = 0;
+        wellness->stress_alert_sent = false; // Reset alerta
+    }
+    
+    // Detectar problemas de energía persistentes
+    if (wellness->energy_level <= care_config->energy_low_threshold) {
+        if (!wellness->energy_alert_sent) {
+            // Verificar si es un patrón o algo temporal
+            float avg_energy_last_6h = calculate_average_energy_last_hours(6);
+            if (avg_energy_last_6h <= care_config->energy_low_threshold) {
+                wellness->energy_alert_sent = true;
+            }
+        }
+    } else if (wellness->energy_level > care_config->energy_low_threshold + 20) {
+        wellness->energy_alert_sent = false; // Reset si mejora significativamente
+    }
+    
+    // Detectar inactividad prolongada
+    if (wellness->inactivity_duration >= care_config->inactivity_alert_time_ms / 1000) {
+        if (!wellness->inactivity_alert_sent) {
+            wellness->inactivity_alert_sent = true;
+        }
+    } else {
+        wellness->inactivity_alert_sent = false;
+    }
+    
+    // Detectar estado de angustia general
+    wellness->is_in_distress = (wellness->stress_level > 80 && wellness->energy_level < 30) ||
+                              (wellness->mood_score < 20) ||
+                              (wellness->consecutive_high_stress_time > 3600); // 1 hora estrés alto
+}
+
+// Calcular tendencias de bienestar
+static void calculate_wellness_trends(void) {
+    partner_wellness_state_t *wellness = &g_partner_wellness;
+    
+    // Calcular tendencia de estrés (últimas 6 horas)
+    float stress_sum_recent = 0, stress_sum_previous = 0;
+    int recent_count = 0, previous_count = 0;
+    
+    for (int i = 0; i < 6; i++) {
+        int hour_index = (wellness->current_hour_index - i + 24) % 24;
+        if (wellness->stress_history[hour_index] > 0) {
+            stress_sum_recent += wellness->stress_history[hour_index];
+            recent_count++;
+        }
+    }
+    
+    for (int i = 6; i < 12; i++) {
+        int hour_index = (wellness->current_hour_index - i + 24) % 24;
+        if (wellness->stress_history[hour_index] > 0) {
+            stress_sum_previous += wellness->stress_history[hour_index];
+            previous_count++;
+        }
+    }
+    
+    if (recent_count > 0 && previous_count > 0) {
+        float avg_recent = stress_sum_recent / recent_count;
+        float avg_previous = stress_sum_previous / previous_count;
+        wellness->stress_trend = avg_recent - avg_previous;
+    }
+    
+    // Calcular tendencia de energía de manera similar
+    float energy_sum_recent = 0, energy_sum_previous = 0;
+    recent_count = previous_count = 0;
+    
+    for (int i = 0; i < 6; i++) {
+        int hour_index = (wellness->current_hour_index - i + 24) % 24;
+        if (wellness->energy_history[hour_index] > 0) {
+            energy_sum_recent += wellness->energy_history[hour_index];
+            recent_count++;
+        }
+    }
+    
+    for (int i = 6; i < 12; i++) {
+        int hour_index = (wellness->current_hour_index - i + 24) % 24;
+        if (wellness->energy_history[hour_index] > 0) {
+            energy_sum_previous += wellness->energy_history[hour_index];
+            previous_count++;
+        }
+    }
+    
+    if (recent_count > 0 && previous_count > 0) {
+        float avg_recent = energy_sum_recent / recent_count;
+        float avg_previous = energy_sum_previous / previous_count;
+        wellness->energy_trend = avg_recent - avg_previous;
+    }
+    
+    ESP_LOGD("PROACTIVE_CARE", "Trends calculated: stress_trend=%.1f, energy_trend=%.1f", 
+            wellness->stress_trend, wellness->energy_trend);
+}
+
+// Verificar y enviar alertas de cuidado
+static void check_and_send_care_alerts(void) {
+    partner_wellness_state_t *wellness = &g_partner_wellness;
+    proactive_care_config_t *care_config = &g_care_config->proactive_care_settings;
+    uint32_t current_time = esp_timer_get_time() / 1000;
+    
+    // Cooldown entre mensajes de cuidado (mínimo 15 minutos)
+    if (current_time - wellness->last_care_message_time < 900) {
+        return;
+    }
+    
+    // Verificar alerta de estrés alto sostenido
+    if (care_config->partner_stress_alert && !wellness->stress_alert_sent) {
+        uint32_t stress_duration = current_time - wellness->consecutive_high_stress_time;
+        if (stress_duration >= 1800) { // 30 minutos de estrés alto
+            send_stress_support_alert(wellness->stress_level, stress_duration);
+            wellness->stress_alert_sent = true;
+            wellness->last_care_message_time = current_time;
+            return;
+        }
+    }
+    
+    // Verificar alerta de energía baja persistente
+    if (care_config->partner_low_energy_alert && wellness->energy_alert_sent && 
+        wellness->energy_trend < -5.0f) { // Tendencia de energía decreciente
+        send_energy_boost_alert(wellness->energy_level, wellness->energy_trend);
+        wellness->last_care_message_time = current_time;
+        return;
+    }
+    
+    // Verificar alerta de inactividad prolongada
+    if (care_config->partner_inactivity_alert && wellness->inactivity_alert_sent) {
+        send_activity_encouragement_alert(wellness->inactivity_duration);
+        wellness->last_care_message_time = current_time;
+        return;
+    }
+    
+    // Verificar preocupación de salud general
+    if (care_config->partner_health_concern_alert && wellness->is_in_distress) {
+        send_general_health_concern_alert();
+        wellness->last_care_message_time = current_time;
+        return;
+    }
+    
+    // Verificar alteración del sueño
+    if (care_config->partner_sleep_disturbance_alert) {
+        uint32_t sleep_quality = get_partner_sleep_quality();
+        if (sleep_quality > 0 && sleep_quality < 40) {
+            send_sleep_concern_alert(sleep_quality);
+            wellness->last_care_message_time = current_time;
+            return;
+        }
+    }
+}
+
+// Enviar alerta de apoyo por estrés
+static esp_err_t send_stress_support_alert(uint8_t stress_level, uint32_t duration_seconds) {
+    proactive_care_config_t *care_config = &g_care_config->proactive_care_settings;
+    
+    care_action_suggestion_t suggestion = {
+        .alert_type = CARE_ALERT_STRESS_SUPPORT,
+        .urgency_level = (stress_level > 90) ? 200 : 150,
+        .estimated_help_duration = 10 // 10 minutos
+    };
+    
+    // Personalizar mensaje según configuración
+    if (strlen(care_config->custom_stress_message) > 0) {
+        strncpy(suggestion.care_message, care_config->custom_stress_message, 
+                sizeof(suggestion.care_message) - 1);
+    } else {
+        snprintf(suggestion.care_message, sizeof(suggestion.care_message),
+                "Tu pareja lleva %lu min con estrés alto (%d%%). ¿Podrías ofrecerle apoyo?", 
+                duration_seconds / 60, stress_level);
+    }
+    
+    snprintf(suggestion.suggested_action, sizeof(suggestion.suggested_action),
+            "Mensaje de apoyo, llamada, o actividad relajante juntos");
+    
+    return send_care_alert_to_user(&suggestion);
+}
+
+// Enviar alerta de impulso de energía
+static esp_err_t send_energy_boost_alert(uint8_t energy_level, float energy_trend) {
+    proactive_care_config_t *care_config = &g_care_config->proactive_care_settings;
+    
+    care_action_suggestion_t suggestion = {
+        .alert_type = CARE_ALERT_ENERGY_BOOST,
+        .urgency_level = (energy_level < 20) ? 180 : 120,
+        .estimated_help_duration = 15
+    };
+    
+    if (strlen(care_config->custom_support_message) > 0) {
+        strncpy(suggestion.care_message, care_config->custom_support_message, 
+                sizeof(suggestion.care_message) - 1);
+    } else {
+        snprintf(suggestion.care_message, sizeof(suggestion.care_message),
+                "Tu pareja tiene energía baja (%d%%) y bajando. ¿Un break juntos?", 
+                energy_level);
+    }
+    
+    snprintf(suggestion.suggested_action, sizeof(suggestion.suggested_action),
+            "Café/té juntos, caminata corta, o snack energético");
+    
+    return send_care_alert_to_user(&suggestion);
+}
+
+// Enviar alerta de estímulo de actividad
+static esp_err_t send_activity_encouragement_alert(uint32_t inactivity_duration) {
+    care_action_suggestion_t suggestion = {
+        .alert_type = CARE_ALERT_ACTIVITY_ENCOURAGE,
+        .urgency_level = (inactivity_duration > 7200) ? 150 : 100, // >2 horas
+        .estimated_help_duration = 20
+    };
+    
+    snprintf(suggestion.care_message, sizeof(suggestion.care_message),
+            "Tu pareja lleva %lu min sin actividad. ¿Una actividad juntos?", 
+            inactivity_duration / 60);
+    
+    snprintf(suggestion.suggested_action, sizeof(suggestion.suggested_action),
+            "Caminata, ejercicio ligero, o simplemente cambiar de ambiente");
+    
+    return send_care_alert_to_user(&suggestion);
+}
+
+// Enviar alerta de preocupación general de salud
+static esp_err_t send_general_health_concern_alert(void) {
+    proactive_care_config_t *care_config = &g_care_config->proactive_care_settings;
+    
+    care_action_suggestion_t suggestion = {
+        .alert_type = CARE_ALERT_HEALTH_CHECK,
+        .urgency_level = 180,
+        .estimated_help_duration = 5
+    };
+    
+    if (strlen(care_config->custom_care_message) > 0) {
+        strncpy(suggestion.care_message, care_config->custom_care_message, 
+                sizeof(suggestion.care_message) - 1);
+    } else {
+        snprintf(suggestion.care_message, sizeof(suggestion.care_message),
+                "Las métricas de tu pareja muestran signos de malestar. ¿Todo bien?");
+    }
+    
+    snprintf(suggestion.suggested_action, sizeof(suggestion.suggested_action),
+            "Mensaje de verificación o llamada rápida");
+    
+    return send_care_alert_to_user(&suggestion);
+}
+
+// Enviar alerta de preocupación por sueño
+static esp_err_t send_sleep_concern_alert(uint32_t sleep_quality) {
+    care_action_suggestion_t suggestion = {
+        .alert_type = CARE_ALERT_SLEEP_CONCERN,
+        .urgency_level = 100,
+        .estimated_help_duration = 5
+    };
+    
+    snprintf(suggestion.care_message, sizeof(suggestion.care_message),
+            "Tu pareja tuvo una mala noche (calidad %lu%%). ¿Un poco de cuidado extra?", 
+            sleep_quality);
+    
+    snprintf(suggestion.suggested_action, sizeof(suggestion.suggested_action),
+            "Mensaje de apoyo o ayuda extra durante el día");
+    
+    return send_care_alert_to_user(&suggestion);
+}
+
+// Enviar alerta de cuidado al usuario
+static esp_err_t send_care_alert_to_user(const care_action_suggestion_t *suggestion) {
+    if (!suggestion) return ESP_ERR_INVALID_ARG;
+    
+    proactive_care_config_t *care_config = &g_care_config->proactive_care_settings;
+    
+    // Respuesta háptica empática si está habilitada
+    if (care_config->haptic_empathy_response) {
+        haptic_execute_pattern(HAPTIC_PATTERN_PARTNER_STRESS_EMPATHY);
+    }
+    
+    // Notificación directa si está habilitada
+    if (care_config->direct_notification_response) {
+        ble_notify_proactive_care_alert(suggestion->alert_type, 
+                                       suggestion->care_message,
+                                       suggestion->suggested_action,
+                                       suggestion->urgency_level);
+    }
+    
+    // Recordatorio suave si está habilitado
+    if (care_config->gentle_reminder_response) {
+        // Usar patrón háptico suave para no ser intrusivo
+        haptic_execute_pattern_with_intensity(HAPTIC_PATTERN_OPTIMAL_ENVIRONMENT_SPARKLE, 
+                                            HAPTIC_CONSCIOUS_SOFT);
+    }
+    
+    // Registrar evento
+    storage_log_event("PROACTIVE_CARE_ALERT", suggestion->care_message);
+    
+    ESP_LOGI("PROACTIVE_CARE", "Care alert sent: type=%d, urgency=%d", 
+            suggestion->alert_type, suggestion->urgency_level);
+    
+    return ESP_OK;
+}
+
+// Configurar umbral de alerta específica
+esp_err_t proactive_care_configure_alert_threshold(uint32_t alert_type, uint8_t threshold) {
+    proactive_care_config_t *care_config = &g_care_config->proactive_care_settings;
+    
+    switch (alert_type) {
+        case CARE_ALERT_STRESS_SUPPORT:
+            care_config->stress_alert_threshold = threshold;
+            break;
+        case CARE_ALERT_ENERGY_BOOST:
+            care_config->energy_low_threshold = threshold;
+            break;
+        case CARE_ALERT_ACTIVITY_ENCOURAGE:
+            care_config->inactivity_alert_time_ms = threshold * 60000; // minutos a ms
+            break;
+        default:
+            return ESP_ERR_INVALID_ARG;
+    }
+    
+    // Guardar configuración actualizada
+    granular_config_save_to_nvs(g_care_config);
+    
+    ESP_LOGI("PROACTIVE_CARE", "Alert threshold updated: type=%lu, threshold=%d", 
+            alert_type, threshold);
+    
+    return ESP_OK;
+}
+
+// Enviar mensaje de apoyo personalizado
+esp_err_t proactive_care_send_support_alert(const char* message) {
+    if (!message || strlen(message) == 0) {
+        return ESP_ERR_INVALID_ARG;
+    }
+    
+    // Crear sugerencia personalizada
+    care_action_suggestion_t suggestion = {
+        .alert_type = CARE_ALERT_GENTLE_REMINDER,
+        .urgency_level = 100,
+        .estimated_help_duration = 5
+    };
+    
+    strncpy(suggestion.care_message, message, sizeof(suggestion.care_message) - 1);
+    strncpy(suggestion.suggested_action, "Mensaje personalizado de cuidado", 
+            sizeof(suggestion.suggested_action) - 1);
+    
+    return send_care_alert_to_user(&suggestion);
+}
+
+// Funciones auxiliares
+static float calculate_average_energy_last_hours(int hours) {
+    partner_wellness_state_t *wellness = &g_partner_wellness;
+    float sum = 0;
+    int count = 0;
+    
+    for (int i = 0; i < hours && i < 24; i++) {
+        int hour_index = (wellness->current_hour_index - i + 24) % 24;
+        if (wellness->energy_history[hour_index] > 0) {
+            sum += wellness->energy_history[hour_index];
+            count++;
+        }
+    }
+    
+    return (count > 0) ? (sum / count) : 0;
+}
+```
+
+**Modos Contextuales Automáticos y Sistema de Privacidad:**
+
+```c
+// contextual_modes_privacy.c
+
+#include "granular_config_system.h"
+#include "advanced_haptic_system.h"
+#include "esp_log.h"
+#include <time.h>
+
+// Estado del modo contextual actual
+typedef struct {
+    user_context_t current_mode;
+    user_context_t previous_mode;
+    uint32_t mode_start_time;
+    uint32_t mode_change_count_today;
+    bool auto_mode_enabled;
+    float mode_confidence_score;        // 0.0-1.0 confianza en detección
+    
+    // Métricas para detección automática
+    float movement_intensity_avg;       // Promedio de intensidad de movimiento
+    float heart_rate_avg;              // Promedio de ritmo cardíaco
+    float stress_level_avg;            // Promedio de nivel de estrés
+    bool partner_proximity;            // Pareja cercana
+    uint8_t ambient_light_level;       // Nivel de luz ambiental
+    uint32_t last_significant_movement; // Última actividad significativa
+} contextual_mode_state_t;
+
+// Estado del modo privado y configuración temporal
+typedef struct {
+    bool private_mode_active;
+    uint32_t private_mode_start;
+    uint32_t private_mode_duration;
+    uint32_t private_mode_auto_exit_time;
+    
+    // Funciones temporalmente deshabilitadas
+    uint64_t temp_disabled_functions;
+    uint32_t temp_disable_start;
+    uint32_t temp_disable_duration;
+    
+    // Programación de cambios
+    bool scheduled_changes_active;
+    scheduled_profile_change_t scheduled_changes[8];
+    uint8_t scheduled_change_count;
+    
+    // Override de emergencia
+    bool emergency_override_active;
+    granular_config_t emergency_backup_config;
+} privacy_temporal_state_t;
+
+// Cambio de perfil programado
+typedef struct {
+    uint32_t trigger_time;              // Tiempo en minutos desde medianoche
+    user_profile_type_t target_profile;
+    bool repeat_daily;
+    bool weekends_different;
+    char description[32];
+} scheduled_profile_change_t;
+
+// Estado global
+static contextual_mode_state_t g_contextual_state = {0};
+static privacy_temporal_state_t g_privacy_state = {0};
+static master_config_t *g_context_config = NULL;
+static TaskHandle_t g_contextual_task = NULL;
+
+// Inicialización del sistema contextual y de privacidad
+esp_err_t contextual_privacy_system_init(master_config_t *config) {
+    if (!config) return ESP_ERR_INVALID_ARG;
+    
+    g_context_config = config;
+    
+    // Inicializar estado contextual
+    g_contextual_state.current_mode = USER_CONTEXT_AUTO_DETECT;
+    g_contextual_state.auto_mode_enabled = true;
+    g_contextual_state.mode_confidence_score = 0.5f;
+    
+    // Cargar estado de privacidad desde NVS
+    load_privacy_state_from_nvs();
+    
+    // Crear tarea de manejo contextual
+    BaseType_t task_created = xTaskCreatePinnedToCore(
+        contextual_mode_management_task,
+        "contextual_modes",
+        4096,
+        NULL,
+        configMAX_PRIORITIES - 5,
+        &g_contextual_task,
+        1  // Core 1
+    );
+    
+    if (task_created != pdPASS) {
+        ESP_LOGE("CONTEXTUAL", "Failed to create contextual task");
+        return ESP_ERR_NO_MEM;
+    }
+    
+    ESP_LOGI("CONTEXTUAL", "Contextual modes and privacy system initialized");
+    return ESP_OK;
+}
+
+// Tarea de gestión de modos contextuales
+static void contextual_mode_management_task(void *pvParameters) {
+    TickType_t last_mode_detection = 0;
+    TickType_t last_scheduled_check = 0;
+    TickType_t last_privacy_check = 0;
+    
+    ESP_LOGI("CONTEXTUAL", "Contextual mode management task started");
+    
+    while (1) {
+        TickType_t current_time = xTaskGetTickCount();
+        
+        // Detección automática de modo cada 30 segundos
+        if (g_contextual_state.auto_mode_enabled && 
+            current_time - last_mode_detection > pdMS_TO_TICKS(30000)) {
+            detect_and_apply_contextual_mode();
+            last_mode_detection = current_time;
+        }
+        
+        // Verificar cambios programados cada minuto
+        if (current_time - last_scheduled_check > pdMS_TO_TICKS(60000)) {
+            check_scheduled_profile_changes();
+            last_scheduled_check = current_time;
+        }
+        
+        // Verificar configuración temporal cada 10 segundos
+        if (current_time - last_privacy_check > pdMS_TO_TICKS(10000)) {
+            check_temporal_configuration();
+            last_privacy_check = current_time;
+        }
+        
+        vTaskDelay(pdMS_TO_TICKS(5000)); // Verificar cada 5 segundos
+    }
+}
+
+// Detectar y aplicar modo contextual automáticamente
+static void detect_and_apply_contextual_mode(void) {
+    // Recopilar métricas actuales
+    collect_contextual_metrics();
+    
+    // Detectar modo basado en métricas
+    user_context_t detected_mode = analyze_contextual_mode();
+    
+    // Aplicar modo si cambió y confianza es alta
+    if (detected_mode != g_contextual_state.current_mode && 
+        g_contextual_state.mode_confidence_score > 0.7f) {
+        
+        apply_contextual_mode(detected_mode);
+    }
+}
+
+// Recopilar métricas para detección contextual
+static void collect_contextual_metrics(void) {
+    contextual_mode_state_t *state = &g_contextual_state;
+    uint32_t current_time = esp_timer_get_time() / 1000000;
+    
+    // Métricas de movimiento
+    imu_data_t imu_data;
+    if (bmi270_read_data(&imu_data) == ESP_OK) {
+        float movement = sqrt(imu_data.accel_x * imu_data.accel_x + 
+                            imu_data.accel_y * imu_data.accel_y + 
+                            imu_data.accel_z * imu_data.accel_z);
+        
+        // Promedio móvil de movimiento
+        state->movement_intensity_avg = (state->movement_intensity_avg * 0.9f) + (movement * 0.1f);
+        
+        // Detectar última actividad significativa
+        if (movement > 1.5f) {
+            state->last_significant_movement = current_time;
+        }
+    }
+    
+    // Métricas de salud
+    state->heart_rate_avg = (state->heart_rate_avg * 0.9f) + (get_current_heart_rate() * 0.1f);
+    state->stress_level_avg = (state->stress_level_avg * 0.9f) + (get_current_stress_level() * 0.1f);
+    
+    // Proximidad de pareja
+    state->partner_proximity = is_partner_nearby();
+    
+    // Nivel de luz ambiental (estimado desde sensores ambientales)
+    bme688_data_t env_data;
+    if (bme688_read_all(&env_data) == ESP_OK) {
+        // Estimar luz basándose en temperatura y otros factores
+        state->ambient_light_level = estimate_ambient_light_level(&env_data);
+    }
+}
+
+// Analizar modo contextual basado en métricas
+static user_context_t analyze_contextual_mode(void) {
+    contextual_mode_state_t *state = &g_contextual_state;
+    uint32_t current_time = esp_timer_get_time() / 1000000;
+    struct tm timeinfo;
+    localtime_r((time_t*)&current_time, &timeinfo);
+    
+    float confidence = 0.0f;
+    user_context_t detected_mode = USER_CONTEXT_RELAXING;
+    
+    // Detectar sueño (22:00-07:00 + baja actividad + baja luz)
+    if (((timeinfo.tm_hour >= 22) || (timeinfo.tm_hour < 7)) && 
+        state->movement_intensity_avg < 0.2f && 
+        state->ambient_light_level < 30) {
+        detected_mode = USER_CONTEXT_SLEEPING;
+        confidence = 0.9f;
+    }
+    // Detectar ejercicio (alta actividad + HR elevado)
+    else if (state->movement_intensity_avg > 2.0f && 
+             state->heart_rate_avg > get_baseline_heart_rate() + 30) {
+        detected_mode = USER_CONTEXT_EXERCISING;
+        confidence = 0.8f;
+    }
+    // Detectar trabajo (horario laboral + baja variabilidad + concentración)
+    else if (timeinfo.tm_hour >= 9 && timeinfo.tm_hour < 17 && 
+             state->movement_intensity_avg < 0.8f && 
+             get_movement_variability() < 0.3f) {
+        detected_mode = USER_CONTEXT_WORKING_FOCUSED;
+        confidence = 0.7f;
+    }
+    // Detectar tiempo de pareja (pareja cerca + horario social/personal)
+    else if (state->partner_proximity && 
+             ((timeinfo.tm_hour >= 18) || (timeinfo.tm_hour < 9) || 
+              (timeinfo.tm_wday == 0 || timeinfo.tm_wday == 6))) {
+        detected_mode = USER_CONTEXT_COUPLE_TIME;
+        confidence = 0.8f;
+    }
+    // Detectar interacción social (movimiento variable + horario social)
+    else if (get_movement_variability() > 0.7f && 
+             state->movement_intensity_avg > 0.5f &&
+             (timeinfo.tm_hour >= 17 || timeinfo.tm_hour < 2)) {
+        detected_mode = USER_CONTEXT_SOCIAL_INTERACTION;
+        confidence = 0.6f;
+    }
+    
+    state->mode_confidence_score = confidence;
+    
+    ESP_LOGD("CONTEXTUAL", "Mode analysis: detected=%d, confidence=%.2f", 
+            detected_mode, confidence);
+    
+    return detected_mode;
+}
+
+// Aplicar modo contextual
+static esp_err_t apply_contextual_mode(user_context_t new_mode) {
+    contextual_mode_state_t *state = &g_contextual_state;
+    contextual_modes_config_t *modes_config = &g_context_config->contextual_settings;
+    
+    // Verificar si el auto-modo está habilitado para este contexto
+    bool auto_enabled = false;
+    switch (new_mode) {
+        case USER_CONTEXT_WORKING_FOCUSED:
+            auto_enabled = modes_config->auto_work_mode;
+            break;
+        case USER_CONTEXT_SLEEPING:
+            auto_enabled = modes_config->auto_sleep_mode;
+            break;
+        case USER_CONTEXT_EXERCISING:
+            auto_enabled = modes_config->auto_exercise_mode;
+            break;
+        case USER_CONTEXT_SOCIAL_INTERACTION:
+            auto_enabled = modes_config->auto_social_mode;
+            break;
+        case USER_CONTEXT_COUPLE_TIME:
+            auto_enabled = true; // Siempre habilitado
+            break;
+        default:
+            auto_enabled = true;
+            break;
+    }
+    
+    if (!auto_enabled) {
+        ESP_LOGD("CONTEXTUAL", "Auto mode disabled for context %d", new_mode);
+        return ESP_OK;
+    }
+    
+    // Guardar modo anterior
+    state->previous_mode = state->current_mode;
+    state->current_mode = new_mode;
+    state->mode_start_time = esp_timer_get_time() / 1000000;
+    state->mode_change_count_today++;
+    
+    // Aplicar configuración específica del modo
+    apply_mode_specific_configuration(new_mode);
+    
+    // Notificar cambio de modo vía BLE
+    ble_notify_contextual_mode_change(new_mode, state->mode_confidence_score);
+    
+    // Log del cambio
+    storage_log_event("CONTEXTUAL_MODE_CHANGE", get_mode_name(new_mode));
+    
+    ESP_LOGI("CONTEXTUAL", "Applied contextual mode: %s (confidence: %.2f)", 
+            get_mode_name(new_mode), state->mode_confidence_score);
+    
+    return ESP_OK;
+}
+
+// Aplicar configuración específica del modo
+static void apply_mode_specific_configuration(user_context_t mode) {
+    contextual_modes_config_t *modes_config = &g_context_config->contextual_settings;
+    granular_config_t *target_config = NULL;
+    
+    // Seleccionar configuración según modo
+    switch (mode) {
+        case USER_CONTEXT_WORKING_FOCUSED:
+            target_config = &modes_config->work_mode_config;
+            break;
+        case USER_CONTEXT_SLEEPING:
+            target_config = &modes_config->sleep_mode_config;
+            break;
+        case USER_CONTEXT_EXERCISING:
+            target_config = &modes_config->exercise_mode_config;
+            break;
+        case USER_CONTEXT_SOCIAL_INTERACTION:
+            target_config = &modes_config->social_mode_config;
+            break;
+        case USER_CONTEXT_COUPLE_TIME:
+            // Habilitar funciones de pareja
+            enable_couple_specific_features();
+            break;
+        case USER_CONTEXT_RELAXING:
+            target_config = &modes_config->relaxation_mode_config;
+            break;
+        default:
+            return; // No hay configuración específica
+    }
+    
+    if (target_config) {
+        // Aplicar configuración temporal (no persistente)
+        apply_temporary_configuration(target_config);
+    }
+}
+
+// Verificar cambios de perfil programados
+static void check_scheduled_profile_changes(void) {
+    if (!g_privacy_state.scheduled_changes_active) {
+        return;
+    }
+    
+    uint32_t current_time = esp_timer_get_time() / 1000000;
+    struct tm timeinfo;
+    localtime_r((time_t*)&current_time, &timeinfo);
+    
+    uint32_t current_minutes = timeinfo.tm_hour * 60 + timeinfo.tm_min;
+    bool is_weekend = (timeinfo.tm_wday == 0 || timeinfo.tm_wday == 6);
+    
+    for (int i = 0; i < g_privacy_state.scheduled_change_count; i++) {
+        scheduled_profile_change_t *change = &g_privacy_state.scheduled_changes[i];
+        
+        // Verificar si es tiempo de cambio
+        if (current_minutes == change->trigger_time) {
+            // Verificar si aplica para fin de semana
+            if (change->weekends_different && is_weekend) {
+                continue;
+            }
+            
+            // Aplicar cambio de perfil
+            granular_config_set_profile(change->target_profile);
+            
+            ESP_LOGI("CONTEXTUAL", "Scheduled profile change: %s at %02d:%02d", 
+                    get_profile_name(change->target_profile), 
+                    timeinfo.tm_hour, timeinfo.tm_min);
+            
+            // Registrar evento
+            storage_log_event("SCHEDULED_PROFILE_CHANGE", change->description);
+        }
+    }
+}
+
+// Verificar configuración temporal y modo privado
+static void check_temporal_configuration(void) {
+    privacy_temporal_state_t *privacy = &g_privacy_state;
+    uint32_t current_time = esp_timer_get_time() / 1000000;
+    
+    // Verificar salida automática del modo privado
+    if (privacy->private_mode_active && privacy->private_mode_auto_exit_time > 0) {
+        if (current_time >= privacy->private_mode_auto_exit_time) {
+            granular_config_disable_private_mode();
+            ESP_LOGI("PRIVACY", "Auto-exited private mode");
+        }
+    }
+    
+    // Verificar reactivación de funciones temporalmente deshabilitadas
+    if (privacy->temp_disabled_functions != 0) {
+        uint32_t disable_duration = current_time - privacy->temp_disable_start;
+        if (disable_duration >= privacy->temp_disable_duration) {
+            // Reactivar funciones
+            privacy->temp_disabled_functions = 0;
+            ESP_LOGI("PRIVACY", "Re-enabled temporarily disabled functions");
+            
+            // Guardar estado
+            save_privacy_state_to_nvs();
+        }
+    }
+}
+
+// Funciones de modo privado
+esp_err_t granular_config_enable_private_mode(uint32_t duration_minutes) {
+    privacy_temporal_state_t *privacy = &g_privacy_state;
+    uint32_t current_time = esp_timer_get_time() / 1000000;
+    
+    privacy->private_mode_active = true;
+    privacy->private_mode_start = current_time;
+    privacy->private_mode_duration = duration_minutes * 60;
+    
+    if (duration_minutes > 0) {
+        privacy->private_mode_auto_exit_time = current_time + privacy->private_mode_duration;
+    } else {
+        privacy->private_mode_auto_exit_time = 0; // Modo indefinido
+    }
+    
+    // Parar compartición de datos inmediatamente
+    pause_data_sharing();
+    
+    // Notificación háptica de activación
+    haptic_execute_pattern(HAPTIC_PATTERN_OPTIMAL_ENVIRONMENT_SPARKLE);
+    
+    // Guardar estado
+    save_privacy_state_to_nvs();
+    
+    ESP_LOGI("PRIVACY", "Private mode enabled for %lu minutes", duration_minutes);
+    
+    return ESP_OK;
+}
+
+esp_err_t granular_config_disable_private_mode(void) {
+    privacy_temporal_state_t *privacy = &g_privacy_state;
+    
+    privacy->private_mode_active = false;
+    privacy->private_mode_auto_exit_time = 0;
+    
+    // Reanudar compartición de datos
+    resume_data_sharing();
+    
+    // Notificación háptica de desactivación
+    haptic_execute_pattern_with_intensity(HAPTIC_PATTERN_OPTIMAL_ENVIRONMENT_SPARKLE, 
+                                        HAPTIC_CONSCIOUS_SOFT);
+    
+    // Guardar estado
+    save_privacy_state_to_nvs();
+    
+    ESP_LOGI("PRIVACY", "Private mode disabled");
+    
+    return ESP_OK;
+}
+
+// Deshabilitar función temporalmente
+esp_err_t granular_config_disable_function_temporarily(uint32_t function_id, uint32_t duration_minutes) {
+    if (function_id >= 64) return ESP_ERR_INVALID_ARG; // Máximo 64 funciones
+    
+    privacy_temporal_state_t *privacy = &g_privacy_state;
+    uint32_t current_time = esp_timer_get_time() / 1000000;
+    
+    // Establecer bit de función deshabilitada
+    privacy->temp_disabled_functions |= (1ULL << function_id);
+    privacy->temp_disable_start = current_time;
+    privacy->temp_disable_duration = duration_minutes * 60;
+    
+    // Guardar estado
+    save_privacy_state_to_nvs();
+    
+    ESP_LOGI("PRIVACY", "Function %lu disabled for %lu minutes", function_id, duration_minutes);
+    
+    return ESP_OK;
+}
+
+// Programar cambio de perfil
+esp_err_t granular_config_schedule_profile_change(uint32_t time_hour_minute, 
+                                                  user_profile_type_t profile) {
+    privacy_temporal_state_t *privacy = &g_privacy_state;
+    
+    if (privacy->scheduled_change_count >= 8) {
+        ESP_LOGW("PRIVACY", "Maximum scheduled changes reached");
+        return ESP_ERR_NO_MEM;
+    }
+    
+    // Convertir hora:minuto a minutos totales
+    uint32_t hours = time_hour_minute / 100;
+    uint32_t minutes = time_hour_minute % 100;
+    uint32_t total_minutes = hours * 60 + minutes;
+    
+    if (hours >= 24 || minutes >= 60) {
+        return ESP_ERR_INVALID_ARG;
+    }
+    
+    // Agregar cambio programado
+    scheduled_profile_change_t *change = &privacy->scheduled_changes[privacy->scheduled_change_count];
+    change->trigger_time = total_minutes;
+    change->target_profile = profile;
+    change->repeat_daily = true;
+    change->weekends_different = false;
+    snprintf(change->description, sizeof(change->description), 
+            "Auto change to %s at %02lu:%02lu", 
+            get_profile_name(profile), hours, minutes);
+    
+    privacy->scheduled_change_count++;
+    privacy->scheduled_changes_active = true;
+    
+    // Guardar estado
+    save_privacy_state_to_nvs();
+    
+    ESP_LOGI("PRIVACY", "Scheduled profile change: %s at %02lu:%02lu", 
+            get_profile_name(profile), hours, minutes);
+    
+    return ESP_OK;
+}
+
+// Verificar si función está habilitada
+bool granular_config_is_function_enabled(uint32_t function_id) {
+    // Verificar si está temporalmente deshabilitada
+    if (g_privacy_state.temp_disabled_functions & (1ULL << function_id)) {
+        return false;
+    }
+    
+    // Verificar configuración granular
+    return is_function_enabled_in_granular_config(function_id);
+}
+```
+
+**Comandos Bluetooth Completos para Configuración Remota:**
+
+```c
+// bluetooth_config_commands.c
+
+// Comandos completos de configuración BLE
+typedef enum {
+    BLE_CMD_SET_PROFILE = 0x10,
+    BLE_CMD_ENABLE_FUNCTION = 0x11,
+    BLE_CMD_DISABLE_FUNCTION = 0x12,
+    BLE_CMD_SET_SHARING_PREF = 0x13,
+    BLE_CMD_ENABLE_PRIVATE_MODE = 0x14,
+    BLE_CMD_DISABLE_PRIVATE_MODE = 0x15,
+    BLE_CMD_SCHEDULE_PROFILE_CHANGE = 0x16,
+    BLE_CMD_SET_CONTEXTUAL_MODE = 0x17,
+    BLE_CMD_CONFIGURE_CARE_ALERT = 0x18,
+    BLE_CMD_PAIR_WITH_PARTNER = 0x19,
+    BLE_CMD_UNPAIR_PARTNER = 0x1A,
+    BLE_CMD_FACTORY_RESET = 0x1B,
+    BLE_CMD_EXPORT_CONFIG = 0x1C,
+    BLE_CMD_IMPORT_CONFIG = 0x1D,
+    BLE_CMD_GET_STATUS = 0x1E,
+    BLE_CMD_EMERGENCY_OVERRIDE = 0x1F
+} ble_config_command_t;
+
+// Estructura de comando BLE extendido
+typedef struct {
+    uint8_t command;
+    uint8_t subcommand;
+    uint16_t parameter1;
+    uint32_t parameter2;
+    char string_param[64];
+    uint8_t checksum;
+} ble_extended_command_t;
+
+// Handler principal de comandos BLE
+esp_err_t ble_config_command_handler(const uint8_t *data, uint16_t len) {
+    if (len < sizeof(ble_extended_command_t)) {
+        ESP_LOGW("BLE_CONFIG", "Invalid command length: %d", len);
+        return ESP_ERR_INVALID_SIZE;
+    }
+    
+    ble_extended_command_t *cmd = (ble_extended_command_t *)data;
+    
+    // Verificar checksum
+    if (!verify_command_checksum(cmd)) {
+        ESP_LOGW("BLE_CONFIG", "Invalid command checksum");
+        return ESP_ERR_INVALID_CRC;
+    }
+    
+    esp_err_t result = ESP_OK;
+    
+    switch (cmd->command) {
+        case BLE_CMD_SET_PROFILE:
+            result = ble_handle_set_profile(cmd);
+            break;
+        case BLE_CMD_ENABLE_FUNCTION:
+            result = ble_handle_enable_function(cmd);
+            break;
+        case BLE_CMD_DISABLE_FUNCTION:
+            result = ble_handle_disable_function(cmd);
+            break;
+        case BLE_CMD_SET_SHARING_PREF:
+            result = ble_handle_set_sharing_preference(cmd);
+            break;
+        case BLE_CMD_ENABLE_PRIVATE_MODE:
+            result = granular_config_enable_private_mode(cmd->parameter1);
+            break;
+        case BLE_CMD_DISABLE_PRIVATE_MODE:
+            result = granular_config_disable_private_mode();
+            break;
+        case BLE_CMD_SCHEDULE_PROFILE_CHANGE:
+            result = granular_config_schedule_profile_change(cmd->parameter1, cmd->parameter2);
+            break;
+        case BLE_CMD_PAIR_WITH_PARTNER:
+            result = ble_handle_pair_with_partner(cmd);
+            break;
+        case BLE_CMD_FACTORY_RESET:
+            result = granular_config_factory_reset();
+            break;
+        case BLE_CMD_GET_STATUS:
+            result = ble_send_complete_status();
+            break;
+        default:
+            ESP_LOGW("BLE_CONFIG", "Unknown command: 0x%02X", cmd->command);
+            result = ESP_ERR_NOT_SUPPORTED;
+            break;
+    }
+    
+    // Enviar respuesta
+    ble_send_command_response(cmd->command, result);
+    
+    return result;
+}
+
+// Enviar estado completo del dispositivo
+static esp_err_t ble_send_complete_status(void) {
+    char status_json[1024];
+    size_t json_size = sizeof(status_json);
+    
+    // Generar JSON con estado completo
+    snprintf(status_json, json_size,
+        "{"
+        "\"profile\":\"%s\","
+        "\"private_mode\":%s,"
+        "\"current_context\":\"%s\","
+        "\"partner_paired\":%s,"
+        "\"battery\":%d,"
+        "\"functions_enabled\":%d,"
+        "\"sharing_active\":%s,"
+        "\"learning_mode\":%s"
+        "}",
+        get_profile_name(g_context_config->current_profile),
+        g_privacy_state.private_mode_active ? "true" : "false",
+        get_mode_name(g_contextual_state.current_mode),
+        g_partner_state.is_paired ? "true" : "false",
+        power_get_battery_percentage(),
+        count_enabled_functions(),
+        is_data_sharing_active() ? "true" : "false",
+        g_context_config->granular_settings.learning_mode ? "true" : "false"
+    );
+    
+    return ble_send_long_response(status_json, strlen(status_json));
 }
